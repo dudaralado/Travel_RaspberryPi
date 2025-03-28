@@ -1,0 +1,2 @@
+## Command to use stow on a different directory other that home directory
+stow  -d Travel_RaspberryPi/dotfile -t ~ nvim
