@@ -9,7 +9,7 @@ sudo apt upgrade -y
 
 ## Installing needed software
 
-sudo apt install -y  isc-dhcp-server bind9 bind9utils bind9-doc dnsutils firewalld vim haproxy
+sudo apt install -y  isc-dhcp-server bind9 bind9utils bind9-doc dnsutils firewalld vim haproxy x11-xkb-utils
 
 wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
 echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo  tee /etc/apt/sources.list.d/gierens.list
