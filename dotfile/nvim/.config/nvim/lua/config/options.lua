@@ -12,4 +12,9 @@ vim.opt.cursorcolumn = true
 vim.api.nvim_set_hl(0, "CursorColumn", { bg = "#313244" }) -- Macchiato theme example
 vim.opt.cursorline = true
 vim.api.nvim_set_hl(0, "CursorLine", { bg = "#313244" }) -- Macchiato theme example
+vim.api.nvim_set_keymap("i", "<CapsLock>", "<Esc>", { noremap = true })
 
+vim.keymap.set('n', '<c-k>', ':wincmd k<CR>')
+vim.keymap.set('n', '<c-j>', ':wincmd j<CR>')
+vim.keymap.set('n', '<c-h>', ':wincmd h<CR>')
+vim.keymap.set('n', '<c-l>', ':wincmd l<CR>')
