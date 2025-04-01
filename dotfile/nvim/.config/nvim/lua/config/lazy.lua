@@ -33,7 +33,3 @@ require("lazy").setup({
   -- automatically check for plugin updates
   checker = { enabled = true },
 })
-
--- Loading showKeys plugging
-vim.cmd("ShowkeysToggle");
-
