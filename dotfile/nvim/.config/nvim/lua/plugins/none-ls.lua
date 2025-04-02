@@ -1,47 +1,47 @@
 return {
-	'nvimtools/none-ls.nvim',
+	"nvimtools/none-ls.nvim",
 	opts = function()
 		local null_ls = require("null-ls")
-local helpers = require("null-ls.helpers")
+		local helpers = require("null-ls.helpers")
 
-local markdownlint = {
-    method = null_ls.methods.DIAGNOSTICS,
-    filetypes = { "markdown" },
-    -- null_ls.generator creates an async source
-    -- that spawns the command with the given arguments and options
-    generator = null_ls.generator({
-        command = "markdownlint",
-        args = { "--stdin" },
-        to_stdin = true,
-        from_stderr = true,
-        -- choose an output format (raw, json, or line)
-        format = "line",
-        check_exit_code = function(code, stderr)
-            local success = code <= 1
+		local markdownlint = {
+                			method = null_ls.methods.DIAGNOSTICS,
+			filetypes = { "markdown" },
+			generator = null_ls.generator({
+				command = "markdownlint",
+				args = { "--stdin" },
+				to_stdin = true,
+				from_stderr = true,
+				format = "line",
+				check_exit_code = function(code, stderr)
+					local success = code <= 1
+					if not success then
+						print(stderr)
+					end
+					return success
+				end,
+				on_output = helpers.diagnostics.from_patterns({
+					{
+						pattern = [[:(%d+):(%d+) [%w-/]+ (.*)]],
+						groups = { "row", "col", "message" },
+					},
+					{
+						pattern = [[:(%d+) [%w-/]+ (.*)]],
+						groups = { "row", "message" },
+					},
+				}),
+			}),
+		}
 
-            if not success then
-                -- can be noisy for things that run often (e.g. diagnostics), but can
-                -- be useful for things that run on demand (e.g. formatting)
-                print(stderr)
-            end
+		null_ls.setup({
+			sources = {
+				null_ls.builtins.formatting.stylua, -- Lua formatter
+			},
+		})
 
-            return success
-        end,
-        -- use helpers to parse the output from string matchers,
-        -- or parse it manually with a function
-        on_output = helpers.diagnostics.from_patterns({
-            {
-                pattern = [[:(%d+):(%d+) [%w-/]+ (.*)]],
-                groups = { "row", "col", "message" },
-            },
-            {
-                pattern = [[:(%d+) [%w-/]+ (.*)]],
-                groups = { "row", "message" },
-            },
-        }),
-    }),
-}
-
-null_ls.register(markdownlint)
-	end
+		-- Set keymap for formatting
+		vim.keymap.set("n", "gf", function()
+			vim.lsp.buf.format({ async = true })
+		end, { desc = "Format buffer using LSP" })
+	end,
 }
